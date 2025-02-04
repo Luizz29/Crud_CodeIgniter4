@@ -44,7 +44,6 @@ $RECYCLE.BIN/
 .env
 .vagrant
 Vagrantfile
-/app/Config/Database.php
 /public
 /vendor
 

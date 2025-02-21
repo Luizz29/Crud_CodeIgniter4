@@ -91,16 +91,16 @@ class UserController extends BaseController
 
     public function updateUser()
     {
-     
+
         $this->db->transBegin();
         try {
             $userid = $this->request->getPost('userid');
             $username = $this->request->getPost('usernm');
             $password = $this->request->getPost('password');
-    
-        
 
-            $dataLama = $this->MsUserModel->getOneData($userid , 'userid')->getRowArray();
+
+
+            $dataLama = $this->MsUserModel->getOneData($userid, 'userid')->getRowArray();
             if (!$dataLama) {
                 $response = [
                     'status' => 'error',
@@ -108,7 +108,7 @@ class UserController extends BaseController
                 ];
                 return $this->response->setJSON($response);
             }
-    
+
             $cekUser = $this->MsUserModel->getOneData($username)->getRowArray();
             if ($cekUser && $cekUser['userid'] != $userid) {
                 $response = [
@@ -117,32 +117,32 @@ class UserController extends BaseController
                 ];
                 return $this->response->setJSON($response);
             }
-    
+
             $data = [
                 'usernm' => $username,
                 'updateddate' => date('Y-m-d H:i:s'),
                 'updatedby' => session()->get('userid')
             ];
-    
+
             if (!empty($password)) {
                 $hashedPassword = md5($password);
                 $data['password'] = $hashedPassword;
             }
-                //menghitung jumlah total baris yang dikembalikan query 
+            //menghitung jumlah total baris yang dikembalikan query 
             // $user = $this->MsUserModel->getOneData($username)->getNumRows();
             // if ($user) {
             //     $data['status'] = 'error';
             //     $data['message'] = 'Username sudah digunakan';
             //     return $this->response->setJSON($data);
             // }
-    
+
             $this->MsUserModel->updateUser($userid, $data);
-            if($this->db->transStatus() === FALSE){
+            if ($this->db->transStatus() === FALSE) {
                 $response = [
                     'status' => 'error',
                     'message' => 'Gagal Mengubah Data'
                 ];
-                $this->db->transRollback(); 
+                $this->db->transRollback();
                 return $this->response->setJSON($response);
             }
             $response = [
@@ -160,14 +160,14 @@ class UserController extends BaseController
             return $this->response->setJSON($response);
         }
     }
-    
+
     public function deleteUser()
     {
         $userid = $this->request->getPost('userid');
         $this->db->transBegin();
         try {
             $this->MsUserModel->deleteUser($userid);
-            if($this->db->transStatus() === FALSE){
+            if ($this->db->transStatus() === FALSE) {
                 $data = [
                     'status' => 'error',
                     'message' => 'Gagal Menghapus Data'
@@ -175,7 +175,7 @@ class UserController extends BaseController
                 $this->db->transRollback();
                 return $this->response->setJSON($data);
             }
-                
+
             $data = [
                 'status' => 'success',
                 'message' => 'Data Berhasil Dihapus',
@@ -195,11 +195,8 @@ class UserController extends BaseController
     //buat agar me return view dari register
 
 
-    public function registerUser(){
+    public function registerUser()
+    {
         return view('register');
     }
- 
-
-   
-
 }

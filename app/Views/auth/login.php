@@ -95,7 +95,7 @@
         }
 
         .input-group:focus-within .input-group-text {
-        
+
             border-color: #6c757d;
         }
     </style>
@@ -111,7 +111,7 @@
                         <p class="text-muted small mt-2">Please login to your account</p>
                     </div>
                     <div class="card-body">
-                        <form id="loginForm" action="/CRUD_AUTOCHEM/Auth/Login" method="post">
+                        <form id="loginForm" action="/Crud_CodeIgniter4/Auth/Login" method="post">
                             <div class="mb-4">
                                 <label for="inputUsername" class="form-label">Username</label>
                                 <div class="input-group">

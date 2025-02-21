@@ -1,4 +1,6 @@
-<?= $this->extend('template/pages'); ?>
+<?= view('template/pages'); ?>
+
+
 <?= $this->section('data'); ?>
 
 <!DOCTYPE html>
@@ -244,7 +246,7 @@
                                     data-condition="${product.condition}" 
                                     data-options="${product.options}" 
                                     data-category="${product.category}">Edit</button>
-                                <form action="/CRUD_AUTOCHEM/products/delete/${product.id}" method="post" class="deleteForm d-inline">
+                                <form action="/Crud_CodeIgniter4/products/delete/${product.id}" method="post" class="deleteForm d-inline">
                                     <?= csrf_field(); ?>
                                     <button id="btn-delete" type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
@@ -287,7 +289,7 @@
 
                         $.ajax({
                             type: 'POST',
-                            url: '/CRUD_AUTOCHEM/products/deleteMultiple',
+                            url: '/Crud_CodeIgniter4/products/deleteMultiple',
                             data: {
                                 id: selectedIds
                             },
@@ -311,7 +313,7 @@
                         e.preventDefault();
                         $.ajax({
                             type: 'POST',
-                            url: '/CRUD_AUTOCHEM/products/store',
+                            url: '/Crud_CodeIgniter4/products/store',
                             data: $(this).serialize(),
                             dataType: 'json',
                             success: function(response) {
@@ -359,7 +361,7 @@
                         const formData = $(this).serialize();
                         $.ajax({
                             type: 'POST',
-                            url: '/CRUD_AUTOCHEM/products/update',
+                            url: '/Crud_CodeIgniter4/products/update',
                             data: formData,
                             dataType: 'json',
                             success: function(response) {
@@ -447,7 +449,7 @@
 
                                 $.ajax({
                                     type: 'POST',
-                                    url: '/CRUD_AUTOCHEM/products/importChunk',
+                                    url: '/Crud_CodeIgniter4/products/importChunk',
                                     data: formData,
                                     contentType: false,
                                     processData: false,
@@ -501,7 +503,7 @@
 
                     function fetchChunk() {
                         $.ajax({
-                            url: '/CRUD_AUTOCHEM/products/exportChunk/' + offset + '/' + limit,
+                            url: '/Crud_CodeIgniter4/products/exportChunk/' + offset + '/' + limit,
                             type: 'GET',
                             success: function(response) {
                                 console.log('Chunk fetched:', response);

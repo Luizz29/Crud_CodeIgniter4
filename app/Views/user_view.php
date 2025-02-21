@@ -151,17 +151,17 @@
                     confirmButtonText: "Yes, delete it!"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                          
-                    $.ajax({
-                        url: '<?= site_url("usercontroller/deleteUser"); ?>',
-                        type: 'POST',
-                        data: {
-                            userid: id
-                        },
-                        success: function(response) {
-                            loadUsers();
-                        }
-                    });
+
+                        $.ajax({
+                            url: '<?= site_url("usercontroller/deleteUser"); ?>',
+                            type: 'POST',
+                            data: {
+                                userid: id
+                            },
+                            success: function(response) {
+                                loadUsers();
+                            }
+                        });
 
                         Swal.fire({
                             title: "Deleted!",
@@ -170,7 +170,7 @@
                         });
                     }
                 });
-                
+
             });
 
             $('#logoutBtn').click(function() {
@@ -178,7 +178,7 @@
                     url: '<?= site_url("auth/logout"); ?>',
                     type: 'GET',
                     success: function(response) {
-                        window.location.href = '/CRUD_AUTOCHEM/login';
+                        window.location.href = '/Crud_CodeIgniter4/login';
                     }
                 });
             });

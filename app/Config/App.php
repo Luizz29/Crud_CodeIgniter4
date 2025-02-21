@@ -16,7 +16,7 @@ class App extends BaseConfig
      *
      * E.g., http://example.com/
      */
-    public string $baseURL = 'http://localhost/CRUD_AUTOCHEM/';
+    public string $baseURL = 'http://10.21.1.27/Crud_CodeIgniter4/';
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.

@@ -47,7 +47,18 @@ $routes->get('/products/deleteMultiple', 'ProductController::deleteMultiple');
 $routes->POST('/products/deleteMultiple', 'ProductController::deleteMultiple');
 
 $routes->get('products/exportChunk/(:num)/(:num)', 'ProductController::exportChunk/$1/$2');
-$routes->post('/CRUD_AUTOCHEM/products/importChunk', 'ProductController::importChunk');
+$routes->post('/Crud_CodeIgniter4/products/importChunk', 'ProductController::importChunk');
 $routes->post('products/importChunk', 'ProductController::importChunk');
 
 $routes->get('products/loadProducts', 'ProductController::loadProducts');
+
+//Chart
+$routes->get('products/chart', 'ProductController::genderChart');
+
+//Gender datatable
+$routes->get('gender/loadGender', 'ProductController::loadGender');
+$routes->POST('gender/addGender', 'ProductController::addGender');
+$routes->get('gender/genderChartData', 'ProductController::genderChartData');
+$routes->post('gender/genderEdit', 'ProductController::editGender');
+$routes->post('gender/bulkDelete', 'ProductController::bulkDelete');
+$routes->post('gender/deleteGender/(:num)', 'ProductController::deleteGender/$1');

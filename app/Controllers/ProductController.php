@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\ProductModel;
+use App\Models\GenderModel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -11,11 +12,13 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class ProductController extends BaseController
 {
     protected $productModel;
+    protected $genderModel;
     protected $db;
 
     public function __construct()
     {
         $this->productModel = new ProductModel();
+        $this->genderModel = new GenderModel();
         $this->db = \Config\Database::connect();
         helper(['form']); // Load the form helper
     }
@@ -36,6 +39,176 @@ class ProductController extends BaseController
         return view('products/create');
     }
 
+    public function genderChart()
+    {
+        $genderData = $this->genderModel->getGender();
+
+        $labels = [];
+        $data = [];
+
+        foreach ($genderData as $gender) {
+            $labels[] = $gender['jenis'];
+            $data[] = $gender['total'];
+        }
+
+        $chartData = [
+            'labels' => $labels,
+            'datasets' => [[
+                'data' => $data,
+                'backgroundColor' => ['grey', 'black', 'green'],
+            ]]
+        ];
+
+        // Kirim ke view dalam format JSON
+        $data['chartData'] = json_encode($chartData);
+
+        return view('products/gender', $data);
+    }
+
+    public function genderChartData()
+    {
+        $genderData = $this->genderModel->getGender();
+
+        $labels = [];
+        $data = [];
+
+        foreach ($genderData as $row) {
+            $labels[] = $row['jenis'];
+            $data[] = $row['total'];
+        }
+
+        $chartData = [
+            'labels' => $labels,
+            'datasets' => [[
+                'data' => $data,
+                'backgroundColor' => ['red', 'blue', 'green'],
+            ]]
+        ];
+
+        return $this->response->setJSON(['status' => true, 'data' => $chartData]);
+    }
+
+    public function loadGender()
+    {
+        $gender = $this->genderModel->getGenderData();
+
+        // Debugging
+        return $this->response->setJSON([
+            'status' => true,
+            'data' => $gender
+
+        ]);
+    }
+    public function addGender()
+    {
+
+        $validation = $this->validate([
+            'username' => 'required|min_length[3]|max_length[255]',
+            'jenis_kelamin' => 'required|in_list[Laki-laki,Perempuan]',
+        ]);
+        if (!$validation) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'errors' => $this->validator->getErrors(),
+            ]);
+        }
+
+        $genderData = [
+            'username' => $this->request->getPost('username'),
+            'jenis' => $this->request->getPost('jenis_kelamin'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        $this->genderModel->insert($genderData);
+        $genderData['id'] = $this->genderModel->getInsertID();
+
+        return $this->response->setJSON([
+            'status' => 'success',
+            'message' => 'Data berhasil ditambahkan!',
+            'data' => $genderData,
+        ]);
+    }
+
+    public function editGender()
+    {
+        $id = $this->request->getPost('id'); // Ambil ID dari POST
+        if (!$id) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'ID tidak ditemukan!',
+            ]);
+        }
+
+        $validation = $this->validate([
+            'username' => 'required|min_length[3]|max_length[255]',
+            'jenis_kelamin' => 'required|in_list[Laki-laki,Perempuan]',
+        ]);
+
+        if (!$validation) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'errors' => $this->validator->getErrors(),
+            ]);
+        }
+
+        $genderData = [
+            'username' => $this->request->getPost('username'),
+            'jenis' => $this->request->getPost('jenis_kelamin'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        $this->genderModel->update($id, $genderData);
+
+        return $this->response->setJSON([
+            'status' => 'success',
+            'message' => 'Data berhasil diperbarui!',
+            'data' => array_merge(['id' => $id], $genderData),
+        ]);
+    }
+    public function bulkDelete()
+    {
+        $ids = $this->request->getPost('ids'); // Ambil array ID dari AJAX
+
+        if (empty($ids)) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Tidak ada data yang dipilih!']);
+        }
+
+        $this->db->table('gender')->whereIn('id', $ids)->delete(); // Hapus berdasarkan ID
+
+        return $this->response->setJSON(['status' => 'success', 'message' => 'Data berhasil dihapus!']);
+    }
+
+    public function deleteGender($id)
+    {
+        $deleted = $this->genderModel->delete($id);
+
+        if ($deleted) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => 'Produk berhasil dihapus.',
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'Gagal menghapus produk.'
+        ]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //ENDD
     public function store()
     {
         $validation = $this->validate([
@@ -329,8 +502,8 @@ class ProductController extends BaseController
             $chunk = json_decode($this->request->getPost('chunk'), true);
             $chunkNumber = $this->request->getPost('chunkNumber');
             $totalChunks = $this->request->getPost('totalChunks');
-    
-           
+
+
             $data = [];
             foreach ($chunk as $row) {
                 $data[] = [
@@ -342,11 +515,11 @@ class ProductController extends BaseController
                     'category' => $row['Category'] ?? ''
                 ];
             }
-    
+
             if (!empty($data)) {
                 $this->productModel->insertBatch($data);
             }
-    
+
             if ($this->db->transStatus() === false) {
                 $this->db->transRollback();
                 return $this->response->setJSON([
@@ -354,15 +527,14 @@ class ProductController extends BaseController
                     'errors' => 'Database transaction gagal'
                 ]);
             }
-    
+
             $this->db->transComplete();
-    
+
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'Chunk ' . ($chunkNumber + 1) . ' of ' . $totalChunks . ' imported successfully',
                 'imported_count' => count($data)
             ]);
-    
         } catch (\Exception $e) {
             $this->db->transRollback();
             return $this->response->setJSON([
@@ -371,5 +543,4 @@ class ProductController extends BaseController
             ]);
         }
     }
-    
 }

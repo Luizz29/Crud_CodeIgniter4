@@ -20,10 +20,10 @@ class AuthController extends BaseController
         if ($this->request->getMethod() === 'post') {
             $usernm = $this->request->getPost('usernm');
             $password = $this->request->getPost('password');
-            
+
             // Cek apakah username sudah ada
             if ($this->userModel->where('usernm', $usernm)->first()) {
-                return redirect()->to('/CRUD_AUTOCHEM/register')->with('error', 'Username sudah terdaftar.');
+                return redirect()->to('/Crud_CodeIgniter4/register')->with('error', 'Username sudah terdaftar.');
             }
 
             $data = [
@@ -34,9 +34,9 @@ class AuthController extends BaseController
             ];
 
             if ($this->userModel->insert($data)) {
-                return redirect()->to('/CRUD_AUTOCHEM/login')->with('success', 'Registrasi berhasil. Silakan login.');
+                return redirect()->to('/Crud_CodeIgniter4/login')->with('success', 'Registrasi berhasil. Silakan login.');
             } else {
-                return redirect()->to('/CRUD_AUTOCHEM/register')->with('error', 'Terjadi kesalahan, coba lagi.');
+                return redirect()->to('/Crud_CodeIgniter4/register')->with('error', 'Terjadi kesalahan, coba lagi.');
             }
         }
 
@@ -56,7 +56,7 @@ class AuthController extends BaseController
                 session()->set([
                     'userid'    => $user['userid'],
                     'usernm'    => $user['usernm'],
-                    'isLoggedIn'=> true
+                    'isLoggedIn' => true
                 ]);
 
                 return redirect()->to('/dashboard'); // Ganti '/dashboard' dengan halaman setelah login

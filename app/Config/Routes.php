@@ -62,3 +62,6 @@ $routes->get('gender/genderChartData', 'ProductController::genderChartData');
 $routes->post('gender/genderEdit', 'ProductController::editGender');
 $routes->post('gender/bulkDelete', 'ProductController::bulkDelete');
 $routes->post('gender/deleteGender/(:num)', 'ProductController::deleteGender/$1');
+
+//Marketplace
+$routes->get('marketplace', 'MarketplaceController::index');

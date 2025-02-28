@@ -320,6 +320,11 @@
             top: 0;
             border-radius: 10px;
         }
+
+        .dark-mode .deleteAlert {
+            background: #333 !important;
+            color: white !important;
+        }
     </style>
 </head>
 
@@ -439,7 +444,6 @@
             <option value="laki-laki" id="filter-laki">Laki-laki</option>
             <option value="perempuan" id="filter-perempuan">Perempuan</option>
         </select>
-        <button class="filter-button">Cari</button>
     </div>
 
     <label class="ms-10">
@@ -448,6 +452,8 @@
 
     <!-- Tombol Bulk Delete -->
     <button id="bulkDelete" class="btn btn-danger ms-3">Delete Multiple Data</button>
+
+    <button class="button-85 ms-3">Cari</button>
 
 
     <div class="container mt-3">
@@ -665,6 +671,8 @@
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
                     cancelButtonColor: '#3085d6',
+                    background: '#343a40',
+                    color: '#fff',
                     confirmButtonText: 'Ya, hapus!',
                     cancelButtonText: 'Batal'
                 }).then((result) => {
@@ -680,6 +688,8 @@
                                         title: 'Berhasil!',
                                         text: response.message,
                                         icon: 'success',
+                                        background: '#343a40',
+                                        color: '#fff',
                                         timer: 1500,
                                         showConfirmButton: false
                                     });
@@ -782,6 +792,8 @@
                 $(".modal-content").addClass("dark-mode");
                 $("#inpt-date-start, #inpt-date-end, #filter-gender").addClass("dark-mode"); // Tambahkan class ke input
                 $("#genderTable").addClass("dark-mode");
+                $("#deleteAlert").addClass("dark-mode");
+
                 modeSwitch.prop("checked", true);
             }
 
@@ -792,12 +804,14 @@
                     $(".modal-content").addClass("dark-mode");
                     $("#inpt-date-start, #inpt-date-end, #filter-gender").addClass("dark-mode");
                     $("#genderTable").addClass("dark-mode");
+                    $("#deleteAlert").addClass("dark-mode");
                     localStorage.setItem("dark-mode", "enabled");
                 } else {
                     $("body").removeClass("dark-mode");
                     $(".modal-content").removeClass("dark-mode");
                     $("#inpt-date-start, #inpt-date-end, #filter-gender").removeClass("dark-mode");
                     $("#genderTable").removeClass("dark-mode");
+                    $("#deleteAlert").removeClass("dark-mode");
                     localStorage.setItem("dark-mode", "disabled");
                 }
             });
